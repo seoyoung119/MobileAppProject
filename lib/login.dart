@@ -43,10 +43,10 @@ class _LoginPageState extends State<LoginPage> {
                     });
 
                     // ignore: use_build_context_synchronously
-                    Navigator.pushNamed(context, '/add');
+                    Navigator.pushNamed(context, '/cardSwipe');
                   } else {
                     // ignore: use_build_context_synchronously
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushNamed(context, '/cardSwipe');
                   }
                 },
                 text: 'Sign in with Google',

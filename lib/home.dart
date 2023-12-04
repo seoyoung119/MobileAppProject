@@ -27,9 +27,8 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> items = List.filled(10, [], growable: true);
 
   Map<String, String> headerss = {
-    "X-NCP-APIGW-API-KEY-ID": "73oah8omwy", // 개인 ?��?��?��?��?�� ?��?��?��
-    "X-NCP-APIGW-API-KEY":
-        "rEFG1h9twWTR4P2GBIpB7gPIb70PZex3ZIt38hOL" // 개인 ?��?���? ?��
+    "X-NCP-APIGW-API-KEY-ID": "73oah8omwy",
+    "X-NCP-APIGW-API-KEY": "rEFG1h9twWTR4P2GBIpB7gPIb70PZex3ZIt38hOL"
   };
 
   Future<void> readJsonFile() async {
@@ -42,15 +41,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> query() async {
-    // position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    // double lat = 0.0144927536231884;
-    // double lon = 0.0181818181818182;
-    // double distance = 200 * 0.000621371;
-    // 37.4929925, 127.030481
-    // 37.4962531  127.0377379
-    // .0035         .007
-
-    // double lowerLat = 37.4929925 - (lat * distance);
     double lowerLat = 37.4962531 - 3 * 0.00092;
     double lowerLon = 127.0377379 - 3 * 0.0013;
     double greaterLat = 37.4962531 + 3 * 0.00092;
@@ -86,7 +76,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void printMarker() {
-    //?��면에 ?��?��?�� 과정?�� findCoords 만큼 반복?��?��.
     for (int i = 0; i < findCoords.length; i++) {
       setMarker(i);
     }
@@ -96,7 +85,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   void setMarker(int index) {
-    //marker?�� ?��?��?�� �??��?���?, ?�� ?��면에 ?��?��?��.
     final NAddableOverlay<NOverlay<void>> overlay = makeOverlay(
       id: '$index',
       position: NLatLng(findCoords[index].location.latitude,
@@ -152,7 +140,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   NAddableOverlay makeOverlay({
-    // marker ?��?�� ?��?��?��?��.
     required NLatLng position,
     required String id,
     required String name,
@@ -188,19 +175,25 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return SizedBox(
+            width: 430,
             height: 400,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(
-                  height: 55,
+                  height: 25,
                 ),
-                Text(
-                  findCoords[index].name,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
+                Container(
+                  child: Text(
+                    findCoords[index].name,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
+                ),
+                const SizedBox(
+                  height: 55,
                 ),
                 const SizedBox(
                   height: 10,
@@ -224,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(
-                  height: 90,
+                  height: 70,
                 ),
                 InkWell(
                   child: Container(
@@ -285,9 +278,9 @@ class _HomePageState extends State<HomePage> {
 
         String jsonCoords = responseGeocode.body;
         String longitude = jsonDecode(jsonCoords)["addresses"][0]['x'];
-        double longitude_d = double.parse(longitude);
+        double longitudeD = double.parse(longitude);
         String latitude = jsonDecode(jsonCoords)["addresses"][0]['y'];
-        double latitude_d = double.parse(latitude);
+        double latitudeD = double.parse(latitude);
 
         // GeoPoint location = GeoPoint(latitude_d, longitude_d);
 
@@ -296,8 +289,8 @@ class _HomePageState extends State<HomePage> {
           "road_address": query,
           "address": address,
           "phone": phone,
-          "latitude": latitude_d,
-          "longitude": longitude_d,
+          "latitude": latitudeD,
+          "longitude": longitudeD,
         });
       } catch (e) {
         print("exception");
@@ -326,10 +319,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // setState(() {
-    //   getCardList();
-    // });
-
     return Scaffold(
       key: scaffoldKey, //drawer
       endDrawer: Drawer(
@@ -390,7 +379,7 @@ class _HomePageState extends State<HomePage> {
               trailing: const Icon(Icons.credit_card),
               title: const Text('문화 누리 카드'),
               onTap: () {
-                addData();
+                // addData();
               },
             ),
             ListTile(
@@ -405,7 +394,7 @@ class _HomePageState extends State<HomePage> {
               trailing: const Icon(Icons.add),
               title: const Text('카드 추가하기'),
               onTap: () {
-                Navigator.pushNamed(context, '/add');
+                Navigator.pushNamed(context, '/cardSwipe');
               },
             ),
             Container(
@@ -445,6 +434,7 @@ class _HomePageState extends State<HomePage> {
                       // '${cardNameDictionary[theCardList[i]]}.json', i);
                     }
                     mapController = controller;
+                    mapController.clearOverlays();
                   },
                 )
               : Container(),

@@ -13,8 +13,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  LocationPermission permission =
-      await Geolocator.requestPermission(); //위치정보 허가
+  // LocationPermission permission =
+  //     await Geolocator.requestPermission(); //위치정보 허가
 
   await NaverMapSdk.instance.initialize(
     clientId: 'xiqeiz52zm',
